@@ -18,13 +18,18 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: <Users></Users>,
-        loader: () => fetch("http://localhost:8000/users"),
+        loader: () =>
+          fetch(
+            "https://user-system-management-server-pcnp77hpm.vercel.app/users"
+          ),
       },
       {
         path: "/update/:id",
         element: <UpdateUser></UpdateUser>,
         loader: ({ params }) =>
-          fetch(`http://localhost:8000/users/${params.id}`),
+          fetch(
+            `https://user-system-management-server-pcnp77hpm.vercel.app/users/${params.id}`
+          ),
       },
     ],
   },

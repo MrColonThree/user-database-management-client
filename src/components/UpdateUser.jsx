@@ -1,5 +1,8 @@
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { IoIosArrowBack } from "react-icons/io";
+import { GiUpgrade } from "react-icons/gi";
+import Swal from "sweetalert2";
 const UpdateUser = () => {
   const loadedUser = useLoaderData();
   const [gender, setGender] = useState(loadedUser?.gender);
@@ -19,25 +22,41 @@ const UpdateUser = () => {
     const gender = form.get("gender");
     const status = form.get("status");
     const updatedUser = { name, email, gender, status };
-    fetch(`http://localhost:8000/users/${loadedUser._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedUser),
-    })
+    fetch(
+      `https://user-system-management-server-pcnp77hpm.vercel.app/users/${loadedUser._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUser),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
-          alert("User updated successfully");
+          Swal.fire("Success!", "User updated successfully!", "success");
         }
         e.target.reset();
         navigate("/users");
       });
   };
   return (
-    <div>
-      <h2>This is update user</h2>
+    <div className="p-5">
+      <Link to="/users">
+        <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto pr-4 pl-2 py-2.5 text-center w-full mt-5 flex gap-1 items-center">
+          <IoIosArrowBack className="text-xl"></IoIosArrowBack>Back
+        </button>
+      </Link>
+      <div className="text-center mb-5">
+        <button
+          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)" }}
+          className="text-3xl font-bold p-1 border-b-2 border-black"
+          disabled
+        >
+          Update User
+        </button>
+      </div>
       <form onSubmit={handleUpdate}>
         <div className="mb-6">
           <label className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -134,11 +153,12 @@ const UpdateUser = () => {
             </label>
           </div>
         </div>
-        <input
+        <button
           type="submit"
-          value="Update"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center w-full"
-        ></input>
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-4 py-2.5 text-center flex items-center gap-2"
+        >
+          <GiUpgrade className="text-lg"></GiUpgrade>Update
+        </button>
       </form>
     </div>
   );

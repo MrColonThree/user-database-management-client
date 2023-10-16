@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BiSave } from "react-icons/bi";
+import Swal from "sweetalert2";
 const NewUser = () => {
   const [gender, setGender] = useState("");
   const [status, setStatus] = useState("");
@@ -18,7 +20,7 @@ const NewUser = () => {
     const gender = form.get("gender");
     const status = form.get("status");
     const user = { name, email, gender, status };
-    fetch("http://localhost:8000/users", {
+    fetch("https://user-system-management-server-pcnp77hpm.vercel.app/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,17 +30,23 @@ const NewUser = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {
-          alert("User added successfully");
+          Swal.fire("Success!", "User added successfully!", "success");
         }
         e.target.reset();
         navigate("/users");
       });
   };
   return (
-    <div className="p-5">
+    <div className="px-5">
       <div className="text-center space-y-4 mb-5">
-        <h2 className="text-3xl ">New User</h2>
-        <p>Sign up for an account using the form below</p>
+        <button
+          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)" }}
+          className="text-3xl font-bold border-b-2 p-1 border-black"
+          disabled
+        >
+          New User
+        </button>
+        <p>Please add a user using the form below</p>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
@@ -135,11 +143,12 @@ const NewUser = () => {
             </label>
           </div>
         </div>
-        <input
+        <button
           type="submit"
-          value="Save"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center w-full"
-        ></input>
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-4 py-2.5 text-center flex items-center gap-2"
+        >
+          <BiSave className="text-lg"></BiSave>Save
+        </button>
       </form>
     </div>
   );
